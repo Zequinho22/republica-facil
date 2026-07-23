@@ -1,9 +1,8 @@
 import { jsPDF } from 'jspdf'
-import autoTableModule from 'jspdf-autotable'
+import autoTable from 'jspdf-autotable'
 import type { SocialEvent, UserProfile } from '../types'
 
 const safeFileName = (value: string) => value.replace(/[^a-zA-Z0-9-_]/g, '_').toLowerCase()
-const autoTable = autoTableModule.default
 
 export function downloadSocialReportPdf(houseName: string, socialEvents: SocialEvent[], users: UserProfile[]) {
   const pdf = new jsPDF()

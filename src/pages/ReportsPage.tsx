@@ -1,11 +1,10 @@
 import { FileSpreadsheet, FileText } from 'lucide-react'
 import { jsPDF } from 'jspdf'
-import autoTableModule from 'jspdf-autotable'
+import autoTable from 'jspdf-autotable'
 import * as XLSX from 'xlsx'
 import { useAppContext } from '../context/AppContext'
 
 const safeFileName = (value: string) => value.replace(/[^a-zA-Z0-9-_]/g, '_').toLowerCase()
-const autoTable = autoTableModule.default
 
 const downloadPdf = (pdf: jsPDF, fileName: string) => {
   const url = URL.createObjectURL(pdf.output('blob'))
