@@ -8,6 +8,8 @@
 
 **Acesse o sistema:** [https://republica-facil-6zjz.vercel.app/](https://republica-facil-6zjz.vercel.app/)
 
+**Vídeo de apresentação:** [https://youtu.be/0Jst2NDQOKY](https://youtu.be/0Jst2NDQOKY)
+
 Sistema web para gestão financeira e organizacional de repúblicas estudantis, construído com React, TypeScript e Vite.
 
 ## Visão geral
