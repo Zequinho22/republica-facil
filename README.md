@@ -6,6 +6,8 @@
 [![Firebase](https://img.shields.io/badge/Firebase-Ready-FFCA28?style=for-the-badge&logo=firebase&logoColor=111827)](https://firebase.google.com/)
 [![Vercel](https://img.shields.io/badge/Vercel-Deploy-000000?style=for-the-badge&logo=vercel&logoColor=ffffff)](https://vercel.com/)
 
+**Acesse o sistema:** [https://republica-facil-6zjz.vercel.app/](https://republica-facil-6zjz.vercel.app/)
+
 Sistema web para gestão financeira e organizacional de repúblicas estudantis, construído com React, TypeScript e Vite.
 
 ## Visão geral
