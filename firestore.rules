@@ -1,0 +1,61 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'Administrador';
+    }
+
+    function userRepublic() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.republicId;
+    }
+
+    function isSameRepublic(resourceData) {
+      return resourceData.republicId == userRepublic();
+    }
+
+    match /users/{userId} {
+      allow read: if isSignedIn() && (userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() && userId == request.auth.uid;
+      allow update: if isSignedIn() && (userId == request.auth.uid || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    match /republics/{republicId} {
+      allow read: if isSignedIn() && isSameRepublic(resourceData);
+      allow create: if isAdmin();
+      allow update, delete: if isAdmin();
+    }
+
+    match /expenses/{expenseId} {
+      allow read: if isSignedIn() && isSameRepublic(resource.data);
+      allow create: if isSignedIn() && isSameRepublic(request.resource.data);
+      allow update: if isSignedIn() && (isAdmin() || (isSameRepublic(resource.data) && isSameRepublic(request.resource.data)));
+      allow delete: if isAdmin() || (isSignedIn() && isSameRepublic(resource.data));
+    }
+
+    match /payments/{paymentId} {
+      allow read: if isSignedIn() && isSameRepublic(resource.data);
+      allow create: if isSignedIn() && isSameRepublic(request.resource.data);
+      allow update: if isSignedIn() && (isAdmin() || (isSameRepublic(resource.data) && isSameRepublic(request.resource.data)));
+      allow delete: if isAdmin() || (isSignedIn() && isSameRepublic(resource.data));
+    }
+
+    match /tasks/{taskId} {
+      allow read: if isSignedIn() && isSameRepublic(resource.data);
+      allow create: if isSignedIn() && isSameRepublic(request.resource.data);
+      allow update: if isSignedIn() && (isAdmin() || (isSameRepublic(resource.data) && isSameRepublic(request.resource.data)));
+      allow delete: if isAdmin() || (isSignedIn() && isSameRepublic(resource.data));
+    }
+
+    match /announcements/{announcementId} {
+      allow read: if isSignedIn() && isSameRepublic(resource.data);
+      allow create: if isSignedIn() && isSameRepublic(request.resource.data);
+      allow update: if isSignedIn() && (isAdmin() || (isSameRepublic(resource.data) && isSameRepublic(request.resource.data)));
+      allow delete: if isAdmin() || (isSignedIn() && isSameRepublic(resource.data));
+    }
+  }
+}

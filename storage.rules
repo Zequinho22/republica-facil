@@ -1,0 +1,26 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'Administrador';
+    }
+
+    function userRepublic() {
+      return firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.republicId;
+    }
+
+    match /receipts/{userId}/{republicId}/{fileName} {
+      allow read: if isSignedIn() && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.republicId == republicId;
+      allow write: if isSignedIn()
+        && request.auth.uid == userId
+        && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.republicId == republicId
+        && request.resource.size <= 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+      allow delete: if isAdmin() || (isSignedIn() && request.auth.uid == userId);
+    }
+  }
+}
